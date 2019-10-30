@@ -1,0 +1,39 @@
+Sub Repair1()
+
+Dim Fso As Object, objFolder As Object, objSubFolder As Object
+Dim FromPath As String
+Dim FileInFolder As Object
+Dim selectedFolder
+With Application.FileDialog(msoFileDialogFolderPicker)
+    .Show
+    FromPath = .SelectedItems(1)
+End With
+Set Fso = CreateObject("Scripting.filesystemobject")
+Set objFolder = Fso.GetFolder(FromPath)
+For Each objSubFolder In objFolder.subfolders
+    For Each FileInFolder In objSubFolder.Files
+        If InStr(1, FileInFolder.Name, ".xlsx") Then 'Or InStr(1, FileInFolder.Name, ".zip") Then
+            Workbooks.Open FileInFolder
+        ActiveSheet.Cells.UnMerge
+        flag = 0
+        x = InputBox("Accounts column")
+        a = InputBox("Compounding start column (from)")
+        b = InputBox("Compounding finish column (to)")        
+        Do While flag <> 20
+            If Cells(x + 1, 1).Value = "" Then
+                For i = a To b
+                    Cells(x, i).Value = Cells(x, i).Text + " " + Cells(x + 1, i).Text
+                    Next
+                    
+                Cells(x + 1, 1).EntireRow.Delete
+                flag = flag + 1
+            Else
+                x = x + 1
+                flag = 0
+            End If
+        Loop
+        ActiveWorkbook.Close SaveChanges:=True        
+        End If
+    Next FileInFolder
+Next objSubFolder
+End Sub
