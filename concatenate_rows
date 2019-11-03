@@ -1,4 +1,4 @@
-Sub Repair1()
+'Sub Repair1()
 
 Dim Fso As Object, objFolder As Object, objSubFolder As Object
 Dim FromPath As String
@@ -36,4 +36,4 @@ For Each objSubFolder In objFolder.subfolders
         End If
     Next FileInFolder
 Next objSubFolder
-End Sub
+'End Sub
